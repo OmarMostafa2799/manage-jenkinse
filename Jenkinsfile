@@ -1,3 +1,4 @@
+
 pipeline{
     agent any
     environment {
@@ -11,13 +12,13 @@ pipeline{
 
     stages{
 
-                stages {
-                    stage('Example Stage') {
-                        steps {
-                            // Use parameters in the pipeline
-                            echo "Username: ${params.USERNAME}"
+                stages('parameter') {
+
+                    steps {
+                        // Use parameters in the pipeline
+                        echo "Username: ${params.USERNAME}"
                         }
-                    }
+
                 }
 
                 stage('init'){
@@ -53,3 +54,27 @@ pipeline{
             
         }
 }
+
+
+
+
+
+    parameters {
+        // Define parameters
+        string(name: 'USERNAME', defaultValue: '', description: 'Enter your username')
+        booleanParam(name: 'ENABLE_TESTS', defaultValue: true, description: 'Enable tests')
+        choice(name: 'BUILD_TYPE', choices: ['Debug', 'Release'], description: 'Choose build type')
+        password(name: 'PASSWORD', defaultValue: '', description: 'Enter your password')
+    }
+
+    stages {
+        stage('Example Stage') {
+            steps {
+                // Use parameters in the pipeline
+                echo "Username: ${params.USERNAME}"
+                echo "Enable tests: ${params.ENABLE_TESTS}"
+                echo "Build type: ${params.BUILD_TYPE}"
+                echo "Password: ${params.PASSWORD}"
+            }
+        }
+    }

@@ -1,14 +1,25 @@
+
 pipeline{
     agent any
     environment {
       MY_VARIABLE = 'Hello, world!'
     }
 
-
+    parameters {
+        // Define parameters
+        string(name: 'USERNAME', defaultValue: '', description: 'Enter your username')
+    }
 
     stages{
 
+                stage('parameter') {
 
+                    steps {
+                        // Use parameters in the pipeline
+                        echo "Username: ${params.USERNAME}"
+                        }
+
+                }
 
                 stage('init'){
                     steps{
@@ -21,10 +32,15 @@ pipeline{
                     }
                 }
                    
-                stage('Example Stage') {
+                stage('pipline 2') {
                     steps {
                         echo "Value of MY_VARIABLE: ${env.MY_VARIABLE}"
                         }
+                    post {
+                        failure {
+                            build '2nd-free-style'
+                        }
+                    }
                 }
         
                 stage('push'){

@@ -5,8 +5,7 @@ pipeline{
     }
 
     stages{
-        stage('Parallel Stage') {
-            parallel {
+
                 stage('init'){
                     steps{
                         echo 'init stage'
@@ -16,17 +15,12 @@ pipeline{
                             echo "This block always runs after this stage."
                         }
                     }
-                   
                 }
-
-                       
-
-
-            stages {
+                   
                 stage('Example Stage') {
                     steps {
                         echo "Value of MY_VARIABLE: ${env.MY_VARIABLE}"
-                    }
+                        }
                 }
         
                 stage('push'){
@@ -42,7 +36,6 @@ pipeline{
                         }
                     
                 }
-            }
+            
         }
-    }
 }

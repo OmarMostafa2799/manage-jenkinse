@@ -4,20 +4,10 @@ pipeline{
       MY_VARIABLE = 'Hello, world!'
     }
 
-    parameters {
-        // Define parameters
-        string(name: 'USERNAME', defaultValue: '', description: 'Enter your username')
-    }
 
     stages{
 
-                stage('parameter') {
 
-                    steps {
-                        echo "Username: ${params.USERNAME}"
-                        }
-
-                }
 
                 stage('init'){
                     steps{

@@ -14,7 +14,6 @@ pipeline{
                 stages('parameter') {
 
                     steps {
-                        // Use parameters in the pipeline
                         echo "Username: ${params.USERNAME}"
                         }
 

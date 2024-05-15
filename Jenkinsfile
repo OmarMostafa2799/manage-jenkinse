@@ -10,7 +10,7 @@ pipeline{
     }
 
     stages{
-                stages('parameter') {
+                stage('parameter') {
 
                     steps {
                         // Use parameters in the pipeline

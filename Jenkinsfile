@@ -35,6 +35,7 @@ pipeline{
                 stage('pipline 2') {
                     steps {
                         echo "Value of MY_VARIABLE: ${env.MY_VARIABLE}"
+                        error 'error will happen'
                         }
                     post {
                         failure {

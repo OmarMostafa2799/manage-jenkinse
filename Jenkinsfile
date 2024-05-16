@@ -1,44 +1,37 @@
 pipeline{
-    agent any
-    environment {
-      MY_VARIABLE = 'Hello, world!'
+    agent{
+        label 'aws-agent'
     }
-
-
     stages{
+        stage('build'){
+            steps{
+                script{
+                    sh 'docker build -t java-app .'
+                }
+            }
+        }
 
-
-
-                stage('init'){
-                    steps{
-                        echo 'init stage'
+        stage('push'){
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'Password', usernameVariable: 'Username')]) {
+                    sh 'docker login --username $Username --password $Password'
+                    sh 'docker tag java-app $Username/java-app'
+                    sh 'docker push $Username/java-app'
                     }
-                    post {
-                        always {
-                            echo "This block always runs after this stage."
-                        }
+                }
+            }
+        }
+
+        stage('deploy'){
+            steps{
+                script{
+                    withAWS(credentials: 'AWS-CLI', region: 'eu-west-1') {
+                    sh 'aws eks update-kubeconfig --region eu-west-1 --name eks'
+                    sh 'kubectl apply -f ./k8s/deployment.yaml'
                     }
                 }
-                   
-                stage('Example Stage') {
-                    steps {
-                        echo "Value of MY_VARIABLE: ${env.MY_VARIABLE}"
-                        }
-                }
-        
-                stage('push'){
-                    steps{
-                        echo 'puch stage'
-                        }
-                    
-                }
-        
-                stage('deploy'){
-                    steps{
-                        echo 'deploy stage'
-                        }
-                    
-                }
-            
+            }
+        }
     }
 }

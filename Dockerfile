@@ -1,11 +1,8 @@
-FROM ubuntu      
+FROM maven:3.6.3-jdk-11-slim
+COPY src /app/src
+COPY pom.xml /app
+RUN mvn -f /app/pom.xml clean package
 
-RUN apt update && apt install ssh -y && apt install sudo -y
+RUN mv /app/target/*.jar app.jar
 
-RUN adduser ansible
-
-RUN usermod -aG sudo ansible
-
-RUN echo "ansible:123" | chpasswd
-
-ENTRYPOINT service ssh start && bash
+ENTRYPOINT ["java","-jar","/app.jar"]

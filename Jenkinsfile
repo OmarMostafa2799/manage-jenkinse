@@ -1,44 +1,45 @@
-pipeline{
+pipeline {
     agent any
+
     environment {
-      MY_VARIABLE = 'Hello, world!'
+        AWS_REGION = 'your_aws_region'
     }
 
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
 
-    stages{
+        stage('Terraform Init') {
+            steps {
+                script {
+                    sh 'terraform init'
+                }
+            }
+        }
 
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    sh 'terraform plan -out=tfplan'
+                }
+            }
+        }
 
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    sh 'terraform apply -auto-approve tfplan'
+                }
+            }
+        }
+    }
 
-                stage('init'){
-                    steps{
-                        echo 'init stage'
-                    }
-                    post {
-                        always {
-                            echo "This block always runs after this stage."
-                        }
-                    }
-                }
-                   
-                stage('Example Stage') {
-                    steps {
-                        echo "Value of MY_VARIABLE: ${env.MY_VARIABLE}"
-                        }
-                }
-        
-                stage('push'){
-                    steps{
-                        echo 'puch stage'
-                        }
-                    
-                }
-        
-                stage('deploy'){
-                    steps{
-                        echo 'deploy stage'
-                        }
-                    
-                }
-            
+    post {
+        always {
+            cleanWs()
+        }
     }
 }

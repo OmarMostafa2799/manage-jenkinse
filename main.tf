@@ -1,6 +1,7 @@
 provider "aws" {
-  region = "eu-east-1"
+  region = "eu-central-1"  # Correct region code
 }
+
 
 # VPC resource
 resource "aws_vpc" "VPC" {
